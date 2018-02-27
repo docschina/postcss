@@ -12,7 +12,7 @@
 
 * [PostCSS API](http://api.postcss.org/)
 * [提问](https://gitter.im/postcss/postcss)
-* [PostCSS 推特](https://twitter.com/postcss) with latest updates.
+* [PostCSS 推特](https://twitter.com/postcss) 最新动态.
 
 ## 工具
 
