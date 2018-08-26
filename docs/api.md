@@ -1,5 +1,5 @@
-# API docs has been moved to [api.postcss.org](http://api.postcss.org/)
+## API文档已被移至api.postcss.org
 
-We have found a new home for the PostCSS API documentation that you can find at [api.postcss.org](http://api.postcss.org/). We hope you find it more easy to use and more accessibility friendly. If you find any bugs or have any other thoughts regarding the API documnetation, feel free to submit an [issue](https://github.com/postcss/postcss/issues). 
+&emsp;&emsp;我们希望您使用更容易 ，更方便无障碍地找到文档位置。我们已经将PostCSS API文件放置在api.postcss.org这个新的地方。您在参考API文件的时候，如果发现任何bug或对API文档有任何其他想法，请随时提交问题。
 
-Thank you,
+&emsp;&emsp;谢谢。

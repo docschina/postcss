@@ -1,231 +1,181 @@
-# How to Write Custom Syntax
+# 如何编写自定义语法
 
-PostCSS can transform styles in any syntax, and is not limited to just CSS.
-By writing a custom syntax, you can transform styles in any desired format.
+PostCSS可以转换任何语法的样式，不仅仅局限于CSS。通过编写自定义语法，你可以转换任何期望格式的样式。
 
-Writing a custom syntax is much harder than writing a PostCSS plugin, but
-it is an awesome adventure.
+编写自定义语法要比编写PostCSS插件困难得多，但这是个值得体验的冒险。
 
-There are 3 types of PostCSS syntax packages:
+有3种类型的PostCSS语法包：
 
-* **Parser** to parse input string to node’s tree.
-* **Stringifier** to generate output string by node’s tree.
-* **Syntax** contains both parser and stringifier.
+* **解析器**将输入字符串解析成节点树。
+* **字符串生成器**按节点树生成输出字符串。
+* **语法**包含解析器和字符串生成器。
 
-## Syntax
+## 语法
 
-A good example of a custom syntax is [SCSS]. Some users may want to transform
-SCSS sources with PostCSS plugins, for example if they need to add vendor
-prefixes or change the property order. So this syntax should output SCSS from
-an SCSS input.
+自定义语法的一个很好的例子是[SCSS]。一些用户可能想要使用PostCSS插件转换SCSS源文件，例如添加前缀或更改属性的顺序。因此这样的语法应该输入一个SCSS源文件并输出另一个SCSS文件。
 
-The syntax API is a very simple plain object, with `parse` & `stringify`
-functions:
+自定义语法API是一个拥有`parse`和`stringify`属性方法的普通对象
 
 ```js
 module.exports = {
-    parse:     require('./parse'),
-    stringify: require('./stringify')
+    parse：    require（'./ parse'），
+    stringify：require（'./ stringify'）
 };
 ```
 
 [SCSS]: https://github.com/postcss/postcss-scss
 
-## Parser
+## 解析器
 
-A good example of a parser is [Safe Parser], which parses malformed/broken CSS.
-Because there is no point to generate broken output, this package only provides
-a parser.
+解析器的一个很好的例子是[Safe Parser]，它可以解析格式不正确的或不完整的CSS。因为产生残缺的输出没有任何意义，因此这个包只提供了一个解析器。
 
-The parser API is a function which receives a string & returns a [`Root`] node.
-The second argument is a function which receives an object with PostCSS options.
+解析器API是一个函数，它接收一个字符串并返回一个[`Root`]节点。第二个参数是一个函数，它接收一个PostCSS选项对象做为参数。
 
 ```js
-var postcss = require('postcss');
+var postcss = require（'postcss'）;
 
-module.exports = function (css, opts) {
-    var root = postcss.root();
-    // Add other nodes to root
-    return root;
+module.exports = function（css，opts）{
+    var root = postcss.root（）;
+    //Add other nodes to root 将其它节点添加到根节点
+    return root;
 };
 ```
 
 [Safe Parser]: https://github.com/postcss/postcss-safe-parser
 [`Root`]:      http://api.postcss.org/Root.html
 
-### Main Theory
+### 主要原理
 
-There are many books about parsers; but do not worry because CSS syntax is
-very easy, and so the parser will be much simpler than a programming language
-parser.
+市面上有很多关于解析器的书；但是不要担心，因为CSS语法非常简单，所以它的解析器比一般编程语言的解析器简单得多。
 
-The default PostCSS parser contains two steps:
+默认的PostCSS解析器包含两个步骤：
 
-1. [Tokenizer] which reads input string character by character and builds a
-  tokens array. For example, it joins space symbols to a `['space', '\n  ']`
-  token, and detects strings to a `['string', '"\"{"']` token.
-2. [Parser] which reads the tokens array, creates node instances and
-  builds a tree.
+1.[Tokenizer]逐字符读入输入的字符串，建立一个令牌数组。例如，它将空格符号连接到`['space', '\n  ']`令牌，将检测到字符串添加到`['string', '"\"{"']`令牌。
+2.[Parser]读取令牌数组，创建节点实例并生成建树。
 
 [Tokenizer]: https://github.com/postcss/postcss/blob/master/lib/tokenize.es6
 [Parser]:    https://github.com/postcss/postcss/blob/master/lib/parser.es6
 
-### Performance
+### 性能
 
-Parsing input is often the most time consuming task in CSS processors. So it
-is very important to have a fast parser.
+解析输入的字符通常是CSS处理器中最耗时的任务。所以拥有一个快速的解析器是非常重要的。
 
-The main rule of optimization is that there is no performance without a
-benchmark. You can look at [PostCSS benchmarks] to build your own.
+优化的主要原则是没有基准就没有性能指标，你可以根据[PostCSS benchmarks]来建立你自己的基准。
 
-Of parsing tasks, the tokenize step will often take the most time, so its
-performance should be prioritized. Unfortunately, classes, functions and
-high level structures can slow down your tokenizer. Be ready to write dirty
-code with repeated statements. This is why it is difficult to extend the
-default [PostCSS tokenizer]; copy & paste will be a necessary evil.
+在解析任务中，令牌化的步骤往往需要最多的时间，所以应该优先考虑它的性能。不幸的是，类，函数和高阶结构会减缓令牌化的过程，所以准备好写重复冗余的脏代码吧。这也是难以扩展默认的[PostCSS tokenizer]的原因;复制和粘贴将是一个不可避免的操作手段。
 
-Second optimization is using character codes instead of strings.
+第二个优化点是使用字符编码来代替字符串。
 
 ```js
-// Slow
+// Slow 慢
 string[i] === '{';
 
-// Fast
-const OPEN_CURLY = 123; // `{'
-string.charCodeAt(i) === OPEN_CURLY;
+// Fast 快
+const OPEN_CURLY = 123; //`{'
+string.charCodeAt（i）=== OPEN_CURLY;
 ```
 
-Third optimization is “fast jumps”. If you find open quotes, you can find
-next closing quote much faster by `indexOf`:
+第三个优化点是“fast jumps(快速跳跃)”。如果你找到开引号，借助`indexOf`可以更快的找到下一个结束引号。
 
 ```js
-// Simple jump
+// Simple jump 简单的跳转
 next = string.indexOf('"', currentPosition + 1);
 
-// Jump by RegExp
+// Jump by RegExp 通过正则来跳转
 regexp.lastIndex = currentPosion + 1;
-regexp.test(string);
+regexp.text(string);
 next = regexp.lastIndex;
 ```
 
-The parser can be a well written class. There is no need in copy-paste and
-hardcore optimization there. You can extend the default [PostCSS parser].
+解析器可以是一个写得很好的类。没有必要进行复制粘贴和硬性优化。你可以扩展默认的[PostCSS parser]。
 
 [PostCSS benchmarks]: https://github.com/postcss/benchmark
 [PostCSS tokenizer]:  https://github.com/postcss/postcss/blob/master/lib/tokenize.es6
 [PostCSS parser]:     https://github.com/postcss/postcss/blob/master/lib/parser.es6
 
-### Node Source
+### 节点源
 
-Every node should have `source` property to generate correct source map.
-This property contains `start` and `end` properties with `{ line, column }`,
-and `input` property with an [`Input`] instance.
+每个节点应该都有一个`source`属性来生成正确的源映射。该属性包含`start`和`end`属性，可以表示成`{line，column}`，还应该包含`input`属性，其值为[`Input`]实例。
 
-Your tokenizer should save the original position so that you can propagate
-the values to the parser, to ensure that the source map is correctly updated.
+你的分词器应该保存原始的位置，以便将值传递给解析器，同时确保源映射被正确更新。
 
 [`Input`]: https://github.com/postcss/postcss/blob/master/lib/input.es6
 
-### Raw Values
+### 原始值
 
-A good PostCSS parser should provide all information (including spaces symbols)
-to generate byte-to-byte equal output. It is not so difficult, but respectful
-for user input and allow integration smoke tests.
+一个好的PostCSS解析器应该提供所有的信息（包括空格符号）以生成字节到字节的幂等输出。这并不是很难，难的遵从用户输入并允许集成烟雾测试。
 
-A parser should save all additional symbols to `node.raws` object.
-It is an open structure for you, you can add additional keys.
-For example, [SCSS parser] saves comment types (`/* */` or `//`)
-in `node.raws.inline`.
+解析器应该将所有附加符号保存到`node.raws`对象中。对你来说，这个对象是一个开放的结构，你可以添加额外的键。例如，[SCSS parser]将注释类型（`/ * * /`或`//`）保存在`node.raws.inline`中。
 
-The default parser cleans CSS values from comments and spaces.
-It saves the original value with comments to `node.raws.value.raw` and uses it,
-if the node value was not changed.
+默认的解析器从注释和空格中提取出纯净的CSS值。它将原始值与注释保存到`node.raws.value.raw`中，如果节点值没有发生改变就直接使用它.
 
 [SCSS parser]: https://github.com/postcss/postcss-scss
 
-### Tests
+### 测试
 
-Of course, all parsers in the PostCSS ecosystem must have tests.
+当然，PostCSS生态系统中的所有解析器都必须有测试。
 
-If your parser just extends CSS syntax (like [SCSS] or [Safe Parser]),
-you can use the [PostCSS Parser Tests]. It contains unit & integration tests.
+如果您的解析器只是扩展了CSS语法（如[SCSS]或[Safe Parser]),你可以使用[PostCSS Parser Tests]。它包含单元和集成测试。
 
 [PostCSS Parser Tests]: https://github.com/postcss/postcss-parser-tests
 
-## Stringifier
+## 字符串生成器
 
-A style guide generator is a good example of a stringifier. It generates output
-HTML which contains CSS components. For this use case, a parser isn't necessary,
-so the package should just contain a stringifier.
+样式生成器是一个很好的字符串生成器的例子。它生成包含CSS组件的HTML。对于这个用例，解析器是不必要的，所以此时语法包应该只包含一个字符串生成器。
 
-The Stringifier API is little bit more complicated, than the parser API.
-PostCSS generates a source map, so a stringifier can’t just return a string.
-It must link every substring with its source node.
+字符串生成器API比解析器API要复杂一点。PostCSS生成一个源映射，所以一个字符串生成器不能只返回一个字符串。它必须链接每个子串与其源节点。
 
-A Stringifier is a function which receives [`Root`] node and builder callback.
-Then it calls builder with every node’s string and node instance.
+字符串生成器是一个函数，它接收[`Root`]节点和构建回调函数作为参数。然后它将节点字符串和节点实例作为参数调用构建回调函数。
 
 ```js
-module.exports = function (root, builder) {
-    // Some magic
+module.exports = function（root，builder）{
+    // Some magic一些魔法
     var string = decl.prop + ':' + decl.value + ';';
     builder(string, decl);
-    // Some science
+    // Some science
 };
 ```
 
-### Main Theory
+### 主要原理
 
-PostCSS [default stringifier] is just a class with a method for each node type
-and many methods to detect raw properties.
+PostCSS [default stringifier]只是一个类，它有一个方法来处理每种节点类型，并且拥有很多方法来检测原始属性。
 
-In most cases it will be enough just to extend this class,
-like in [SCSS stringifier].
+在大多数情况下，只要扩展这个类就足够了，就像在[SCSS stringifier]中一样。
 
 [default stringifier]: https://github.com/postcss/postcss/blob/master/lib/stringifier.es6
 [SCSS stringifier]:    https://github.com/postcss/postcss-scss/blob/master/lib/scss-stringifier.es6
 
-### Builder Function
+### 构建函数
 
-A builder function will be passed to `stringify` function as second argument.
-For example, the default PostCSS stringifier class saves it
-to `this.builder` property.
+构建函数将作为第二个参数传递给`stringify`函数。例如，默认的PostCSS字符串生成器类将其保存到`this.builder`属性。
 
-Builder receives output substring and source node to append this substring
-to the final output.
+构建函数接收输出子字符串和源节点，并将此子字符串追加到最后的输出。
 
-Some nodes contain other nodes in the middle. For example, a rule has a `{`
-at the beginning, many declarations inside and a closing `}`.
+一些节点在中间包含其他节点。例如，一个规则以`{`开始，里面包含很多声明的时候，然后以`}`结束。
 
-For these cases, you should pass a third argument to builder function:
-`'start'` or `'end'` string:
+对于这些情况，您应该传递第三个参数给构建函数：`'start'` 或者 `'end'` 字符串:
 
 ```js
-this.builder(rule.selector + '{', rule, 'start');
-// Stringify declarations inside
-this.builder('}', rule, 'end');
+this.builder（rule.selector +'{'，rule，'start'）;
+//Stringify declarations inside 将内部的声明字符串化
+this.builder（'}'，rule，'end'）;
 ```
 
-### Raw Values
+### 原始值
 
-A good PostCSS custom syntax saves all symbols and provide byte-to-byte equal
-output if there were no changes.
+一个好的PostCSS自定义语法会保存所有的符号，如果没有变化的话，它会提供字节到字节的幂等输出。
 
-This is why every node has `node.raws` object to store space symbol, etc.
+这也就是为什么每个节点都有`node.raws`对象来存储空间符号等等。
 
-Be careful, because sometimes these raw properties will not be present; some
-nodes may be built manually, or may lose their indentation when they are moved
-to another parent node.
+不过要小心，因为有时这些原始属性不会出现;一些节点可能是由手动建立的，或者在移动时到另一个父节点时可能会失去缩进。
 
-This is why the default stringifier has a `raw()` method to autodetect raw
-properties by other nodes. For example, it will look at other nodes to detect
-indent size and them multiply it with the current node depth.
+这也就是为什么默认的字符串生成器拥有一个`raw()`方法来自动检测其他节点的原始属性。例如，它会查看其他节点来检测缩进大小，并将其与当前节点深度相乘。
 
-### Tests
+### 测试
 
-A stringifier must have tests too.
+一个字符串生成器也必须有测试。
 
-You can use unit and integration test cases from [PostCSS Parser Tests].
-Just compare input CSS with CSS after your parser and stringifier.
+你可以使用[PostCSS Parser Tests]中的单元和集成测试用例，只需要比较输入的CSS和经过解析器和字符串生成器处理后的CSS。
+
 
 [PostCSS Parser Tests]: https://github.com/postcss/postcss-parser-tests
