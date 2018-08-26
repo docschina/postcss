@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PostCSS and Source Maps | PostCSS</title>
+    <meta name="description" content="PostCSS中文文档">
+    <link rel="icon" href="/docs/image/favicon.ico">
+    
+    <link rel="preload" href="/docs/assets/css/0.styles.9fbd1353.css" as="style"><link rel="preload" href="/docs/assets/js/app.eaa7f4de.js" as="script"><link rel="preload" href="/docs/assets/js/9.8992b221.js" as="script"><link rel="prefetch" href="/docs/assets/js/5.76723d6f.js"><link rel="prefetch" href="/docs/assets/js/2.d512ec45.js"><link rel="prefetch" href="/docs/assets/js/3.7eef38f1.js"><link rel="prefetch" href="/docs/assets/js/4.812a693c.js"><link rel="prefetch" href="/docs/assets/js/6.da8869f0.js"><link rel="prefetch" href="/docs/assets/js/7.0e309939.js"><link rel="prefetch" href="/docs/assets/js/8.a651ce88.js"><link rel="prefetch" href="/docs/assets/js/10.3bf4754a.js"><link rel="prefetch" href="/docs/assets/js/11.81f97380.js">
+    <link rel="stylesheet" href="/docs/assets/css/0.styles.9fbd1353.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/docs/" class="home-link router-link-active"><!----> <span class="site-name">PostCSS</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/docs/" class="nav-link">首页</a></div><div class="nav-item"><a href="/docs/api.html" class="nav-link">文档</a></div><div class="nav-item"><a href="https://docschina.org" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  印记中文
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://github.com/docschina/postcss/tree/cn/docs" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  翻译
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/docs/" class="nav-link">首页</a></div><div class="nav-item"><a href="/docs/api.html" class="nav-link">文档</a></div><div class="nav-item"><a href="https://docschina.org" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  印记中文
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://github.com/docschina/postcss/tree/cn/docs" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  翻译
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>指南</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/docs/guidelines/plugin.html" class="sidebar-link">PostCSS Plugin Guidelines</a></li><li><a href="/docs/guidelines/runner.html" class="sidebar-link">PostCSS Runner Guidelines</a></li></ul></div></li><li><a href="/docs/api.html" class="sidebar-link">API文档</a></li><li><a href="/docs/syntax.html" class="sidebar-link">如何编写自定义语法</a></li><li><a href="/docs/plugins.html" class="sidebar-link">PostCSS Plugins</a></li><li><a href="/docs/writing-a-plugin.html" class="sidebar-link">编写一个PostCSS插件</a></li><li><a href="/docs/source-maps.html" class="active sidebar-link">PostCSS and Source Maps</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/source-maps.html#options" class="sidebar-link">Options</a></li></ul></li></ul> </div> <div class="page"> <div class="content"><h1 id="postcss-and-source-maps"><a href="#postcss-and-source-maps" aria-hidden="true" class="header-anchor">#</a> PostCSS and Source Maps</h1> <p>PostCSS has great <a href="http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/" target="_blank" rel="noopener noreferrer">source maps<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> support. It can read and interpret maps
+from previous transformation steps, autodetect the format that you expect,
+and output both external and inline maps.</p> <p>To ensure that you generate an accurate source map, you must indicate the input
+and output CSS file paths — using the options <code>from</code> and <code>to</code>, respectively.</p> <p>To generate a new source map with the default options, simply set <code>map: true</code>.
+This will generate an inline source map that contains the source content.
+If you don’t want the map inlined, you can set <code>map.inline: false</code>.</p> <div class="language-js extra-class"><pre class="language-js"><code>processor
+    <span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>css<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        <span class="token keyword">from</span><span class="token punctuation">:</span> <span class="token string">'app.sass.css'</span><span class="token punctuation">,</span>
+        to<span class="token punctuation">:</span>   <span class="token string">'app.css'</span><span class="token punctuation">,</span>
+        map<span class="token punctuation">:</span> <span class="token punctuation">{</span> inline<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        result<span class="token punctuation">.</span>map <span class="token comment">//=&gt; '{ &quot;version&quot;:3,</span>
+                   <span class="token comment">//      &quot;file&quot;:&quot;app.css&quot;,</span>
+                   <span class="token comment">//      &quot;sources&quot;:[&quot;app.sass&quot;],</span>
+                   <span class="token comment">//       &quot;mappings&quot;:&quot;AAAA,KAAI&quot; }'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>If PostCSS finds source maps from a previous transformation,
+it will automatically update that source map with the same options.</p> <h2 id="options"><a href="#options" aria-hidden="true" class="header-anchor">#</a> Options</h2> <p>If you want more control over source map generation, you can define the <code>map</code>
+option as an object with the following parameters:</p> <ul><li><p><code>inline</code> boolean: indicates that the source map should be embedded
+in the output CSS as a Base64-encoded comment. By default, it is <code>true</code>.
+But if all previous maps are external, not inline, PostCSS will not embed
+the map even if you do not set this option.</p> <p>If you have an inline source map, the <code>result.map</code> property will be empty,
+as the source map will be contained within the text of <code>result.css</code>.</p></li> <li><p><code>prev</code> string, object, boolean or function: source map content from
+a previous processing step (for example, Sass compilation).
+PostCSS will try to read the previous source map automatically
+(based on comments within the source CSS), but you can use this option
+to identify it manually. If desired, you can omit the previous map
+with <code>prev: false</code>.</p></li> <li><p><code>sourcesContent</code> boolean: indicates that PostCSS should set the origin
+content (for example, Sass source) of the source map. By default,
+it is <code>true</code>. But if all previous maps do not contain sources content,
+PostCSS will also leave it out even if you do not set this option.</p></li> <li><p><code>annotation</code> boolean or string: indicates that PostCSS should add annotation
+comments to the CSS. By default, PostCSS will always add a comment with a path
+to the source map. PostCSS will not add annotations to CSS files that
+do not contain any comments.</p> <p>By default, PostCSS presumes that you want to save the source map as
+<code>opts.to + '.map'</code> and will use this path in the annotation comment.
+A different path can be set by providing a string value for <code>annotation</code>.</p> <p>If you have set <code>inline: true</code>, annotation cannot be disabled.</p></li> <li><p><code>from</code> string: by default, PostCSS will set the <code>sources</code> property of the map
+to the value of the <code>from</code> option. If you want to override this behaviour, you
+can use <code>map.from</code> to explicitly set the source map's <code>sources</code> property.
+Path should be absolute or relative from generated file
+(<code>to</code> option in <code>process()</code> method).</p></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/docs/writing-a-plugin.html" class="prev">
+          编写一个PostCSS插件
+        </a></span> <!----></p></div> </div> <!----></div></div>
+    <script src="/docs/assets/js/9.8992b221.js" defer></script><script src="/docs/assets/js/app.eaa7f4de.js" defer></script>
+  </body>
+</html>
