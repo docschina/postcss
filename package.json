@@ -38,6 +38,7 @@
     "eslint-ci": "^0.1.1",
     "eslint-config-postcss": "^2.0.2",
     "fs-extra": "^5.0.0",
+    "gh-pages": "^1.2.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
     "gulp-changed": "^3.2.0",
@@ -52,6 +53,7 @@
     "run-sequence": "^2.2.1",
     "size-limit": "^0.14.0",
     "strip-ansi": "^4.0.0",
+    "vuepress": "^0.14.2",
     "yaspeller-ci": "^1.0.0"
   },
   "scripts": {
@@ -59,7 +61,10 @@
     "spell": "yarn docs && yaspeller-ci api/*.html *.md docs/{**/,}*.md",
     "docs": "jsdoc -c .jsdocrc lib/*.es6",
     "lint": "eslint-ci *.js lib/*.es6 test/*.js",
-    "test": "gulp && jest && yarn lint && yarn spell && size-limit"
+    "test": "gulp && jest && yarn lint && yarn spell && size-limit",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "gh-pages-docs": "gh-pages -d ./docs/.vuepress/dist --branch gh-pages-docs"
   },
   "main": "lib/postcss",
   "types": "lib/postcss.d.ts",
@@ -68,9 +73,7 @@
     "lib/*.es6": "eslint",
     "*.md": "yaspeller-ci"
   },
-  "pre-commit": [
-    "lint-staged"
-  ],
+  "pre-commit": [],
   "browser": {
     "supports-color": false,
     "chalk": false,
