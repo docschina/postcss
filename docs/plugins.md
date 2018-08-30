@@ -1,10 +1,10 @@
 # PostCSS Plugins
 
-## Control
+## 控制
 
-There are two ways to make PostCSS magic more explicit.
+有两个办法让 PostCSS 的魔法更加直观使用。
 
-Limit a plugin's local stylesheet context using [`postcss-plugin-context`]:
+譬如，使用 [`postcss-plugin-context`] 将一个插件的样式上下文环境限制：
 
 ```css
 .css-example.is-test-for-css4-browsers {
@@ -17,7 +17,7 @@ Limit a plugin's local stylesheet context using [`postcss-plugin-context`]:
 }
 ```
 
-Or enable plugins directly in CSS using [`postcss-use`]:
+或者可以使用 `postcss-use`] 直接在 CSS 里启用插件：
 
 ```css
 @use autoprefixer(browsers: ['last 2 versions']);
@@ -30,7 +30,7 @@ Or enable plugins directly in CSS using [`postcss-use`]:
 [`postcss-plugin-context`]: https://github.com/postcss/postcss-plugin-context
 [`postcss-use`]:            https://github.com/postcss/postcss-use
 
-## Packs
+## 打包
 
 * [`postcss-utilities`] includes the most commonly used mixins, shortcuts
   and helpers to use as `@util` rules.
@@ -60,7 +60,7 @@ Or enable plugins directly in CSS using [`postcss-use`]:
 [`atcss`]:             https://github.com/morishitter/atcss
 [`postcss-hamster`]:   https://github.com/h0tc0d3/postcss-hamster
 
-## Future CSS Syntax
+## 面向未来的 CSS 语法
 
 * [`postcss-apply`] supports custom properties sets references.
 * [`postcss-attribute-case-insensitive`] supports case insensitive attributes.
@@ -102,7 +102,7 @@ Or enable plugins directly in CSS using [`postcss-use`]:
 
 See also [`cssnext`] plugins pack to add future CSS syntax by one line of code.
 
-## Fallbacks
+## 向下兼容
 
 * [`postcss-color-rgba-fallback`] transforms `rgba()` to hexadecimal.
 * [`postcss-disabled`] adds a `[disabled]` attribute and/or a `.disabled` class
@@ -137,7 +137,7 @@ See also [`oldie`] plugins pack.
 
 [`Flexibility polyfill`]: https://github.com/10up/flexibility
 
-## Language Extensions
+## 语言扩展
 
 * [`postcss-aspect-ratio`] fix an element's dimensions to an aspect ratio.
 * [`postcss-atroot`] place rules directly at the root node.
@@ -200,7 +200,7 @@ See also [`precss`] plugins pack to add them by one line of code.
 
 [Rust-style pattern matching]: https://doc.rust-lang.org/book/match.html
 
-## Colors
+## 颜色
 
 * [`postcss-ase-colors`] replaces color names with values read
   from an ASE palette file.
@@ -229,7 +229,7 @@ See also [`precss`] plugins pack to add them by one line of code.
 * [`postcss-get-color`] get the prominent colors from an image.
 * [`postcss-randomcolor`] supports function to use random color.
 
-## Images and Fonts
+## 图片与字体
 
 * [`postcss-assets`] allows you to simplify URLs, insert image dimensions,
   and inline files.
@@ -269,7 +269,7 @@ loosely resembles the original.
 * [`postcss-inline-svg`] inline SVG images and customize their styles.
 * [`webpcss`] adds URLs for WebP images for browsers that support WebP.
 
-## Grids
+## 网格
 
 * [`postcss-grid`] adds a semantic grid system.
 * [`postcss-grid-kiss`] transforms ASCII-art grids into CSS Grid layout.
@@ -285,7 +285,7 @@ loosely resembles the original.
 * [`postcss-simple-grid`] create grid with one line.
 * [`lost`] feature-rich `calc()` grid system by Jeet author.
 
-## Optimizations
+## 优化
 
 * [`postcss-calc`] reduces `calc()` to values
   (when expressions involve the same units).
@@ -313,7 +313,7 @@ See also plugins in modular minifier [`cssnano`].
 [@import (reference)]: http://lesscss.org/features/#import-options-reference
 [SVGO]: https://github.com/svg/svgo
 
-## Shortcuts
+## 快捷工具
 
 * [`postcss-alias`] creates shorter aliases for properties.
 * [`postcss-alias-atrules`] creates shorter aliases for at-rules.
@@ -363,7 +363,7 @@ See also plugins in modular minifier [`cssnano`].
 * [`postcss-animation`] PostCSS plugin that adds `@keyframes` from animate.css.
 * [`postcss-magic-animations`] PostCSS plugin that adds `@keyframes` from Magic Animations.
 
-## Others
+## 其它
 
 * [`postcss-alter-property-value`] alters your CSS declarations from a rule based configuration.
 * [`postcss-attribute-selector-prefix`] adds a prefix to attribute selectors
@@ -423,7 +423,7 @@ See also plugins in modular minifier [`cssnano`].
 
 [flexbox bugs]: https://github.com/philipwalton/flexbugs
 
-## Analysis
+## 分析
 
 * [`postcss-bem-linter`] lints CSS for conformance to SUIT CSS methodology.
 * [`postcss-cssstats`] returns an object with CSS statistics.
@@ -436,7 +436,7 @@ See also plugins in modular minifier [`cssnano`].
 * [`list-selectors`] lists and categorizes the selectors used in your CSS,
   for code review.
 
-## Reporters
+## 反馈报告
 
 * [`postcss-browser-reporter`] displays warning messages from other plugins
   right in your browser.
@@ -444,7 +444,7 @@ See also plugins in modular minifier [`cssnano`].
 * [`postcss-reporter`] logs warnings and other messages from other plugins
   in the console.
 
-## Fun
+## 有趣的项目
 
 * [`postcss-australian-stylesheets`] Australian Style Sheets.
 * [`postcss-andalusian-stylesheets`] Andalusian Style Sheets.

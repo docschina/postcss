@@ -1,15 +1,10 @@
-# PostCSS and Source Maps
+# PostCSS 和 Source Maps
 
-PostCSS has great [source maps] support. It can read and interpret maps
-from previous transformation steps, autodetect the format that you expect,
-and output both external and inline maps.
+PostCSS 对 [source maps] 支持很好。它能够读取和解析从之前转换步骤生成的映射，自动检测你期望的格式，并且输出外联和内联映射。
 
-To ensure that you generate an accurate source map, you must indicate the input
-and output CSS file paths — using the options `from` and `to`, respectively.
+为了保证你生成准确的 source map （源码映射），你必须写明输入与输出的 CSS 文件路径 —— 分别使用 `from` 和 `to` 参数。
 
-To generate a new source map with the default options, simply set `map: true`.
-This will generate an inline source map that contains the source content.
-If you don’t want the map inlined, you can set `map.inline: false`.
+如果用默认配置生成新的源码映射，只要设置 `map: true` 即可。这会生成一个内联的源码映射，包含源码的内容。如果你不想将映射内联，你可以设置 `map.inline: false`。
 
 ```js
 processor
@@ -25,50 +20,32 @@ processor
                    //       "mappings":"AAAA,KAAI" }'
     });
 ```
+如果 PostCSS 从之前的转变中发现源码映射，它会自动用同样的配置更新源码映射。
 
-If PostCSS finds source maps from a previous transformation,
-it will automatically update that source map with the same options.
+## 配置
 
-## Options
+如果你想要对源码映射的生成有更多的控制，可以定义一个 `map` 对象作为配置，并配置以下的参数：
 
-If you want more control over source map generation, you can define the `map`
-option as an object with the following parameters:
+* `inline` boolean: 表明源码映射会以 Base64 编码注释的方式被内置到输出的 CSS中。该参数默认为 `true`。
+  但如果先前的所有映射都是外联而不是内联的，那么 PostCSS 则不会内置映射即使你不设置这个参数。
 
-* `inline` boolean: indicates that the source map should be embedded
-  in the output CSS as a Base64-encoded comment. By default, it is `true`.
-  But if all previous maps are external, not inline, PostCSS will not embed
-  the map even if you do not set this option.
+  如果你有一个内联的资源映射，那么 `result.map` 属性则会为空，因为源码映射被包含在 `result.css` 的文本中。
 
-  If you have an inline source map, the `result.map` property will be empty,
-  as the source map will be contained within the text of `result.css`.
+* `prev` string, object, boolean 或 function: 源码映射来自先前的处理步骤（例如，Sass编译）。
+  PostCSS将尝试自动读取之前的源码映射（基于源CSS中的注释），但您可以使用此配置来手动识别它。如果需要，您可以省略以前的源码映射，使用 `prev：false` 参数。
 
-* `prev` string, object, boolean or function: source map content from
-  a previous processing step (for example, Sass compilation).
-  PostCSS will try to read the previous source map automatically
-  (based on comments within the source CSS), but you can use this option
-  to identify it manually. If desired, you can omit the previous map
-  with `prev: false`.
+* `sourcesContent` boolean: 表示 PostCSS 应设置源码映射的源内容（例如，Sass源）。默认值为 `true`。
+  但如果以前的所有源码映射都不包含源内容，即使您没有设置此配置，PostCSS也会将其忽略。
 
-* `sourcesContent` boolean: indicates that PostCSS should set the origin
-  content (for example, Sass source) of the source map. By default,
-  it is `true`. But if all previous maps do not contain sources content,
-  PostCSS will also leave it out even if you do not set this option.
+* `annotation` boolean or string: 表示 PostCSS 应添加注释评论到 CSS 中。。默认情况下，PostCSS 将始终添加带路径的注释
+  到源码映射。 PostCSS 不会为没包含任何评论的 CSS 文件添加注释。
 
-* `annotation` boolean or string: indicates that PostCSS should add annotation
-  comments to the CSS. By default, PostCSS will always add a comment with a path
-  to the source map. PostCSS will not add annotations to CSS files that
-  do not contain any comments.
+  默认情况下，PostCSS 假定您要将源码映射另存为到 `opts.to +'。map'` 并将在注释注释中使用此路径。
+  可以通过为 `annotation` 提供字符串值来设置不同的路径。
 
-  By default, PostCSS presumes that you want to save the source map as
-  `opts.to + '.map'` and will use this path in the annotation comment.
-  A different path can be set by providing a string value for `annotation`.
+  如果你设置 `inline: true`, 那么注释则无法禁用。
 
-  If you have set `inline: true`, annotation cannot be disabled.
-
-* `from` string: by default, PostCSS will set the `sources` property of the map
-  to the value of the `from` option. If you want to override this behaviour, you
-  can use `map.from` to explicitly set the source map's `sources` property.
-  Path should be absolute or relative from generated file
-  (`to` option in `process()` method).
+* `from` string: 默认情况下，PostCSS 将设置映射的 `sources` 属性为 `from` 选项的值。如果要覆写此行为，则你可以使用
+  `map.from` 来显式设置源码映射的 `sources` 属性。路径应该是生成文件的绝对或相对路径（`process（）` 方法中的 `to` 选项）。
 
 [source maps]: http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/
