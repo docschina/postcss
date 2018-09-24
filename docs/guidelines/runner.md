@@ -1,25 +1,22 @@
-# PostCSS Runner Guidelines
+# PostCSS Runner 指南
 
-A PostCSS runner is a tool that processes CSS through a user-defined list
-of plugins; for example, [`postcss-cli`] or [`gulp‑postcss`].
-These rules are mandatory for any such runners.
+PostCSS runner是一个通过一连串用户定义插件处理CSS的工具;例如，[`postcss-cli`]或[`gulp-postcss`]。
+这些规则对于任何此类 runner 都是强制性的。
 
-For single-plugin tools, like [`gulp-autoprefixer`],
-these rules are not mandatory but are highly recommended.
+对于单插件工具，如[`gulp-autoprefixer`]，这些规则不是强制性的，但非常建议使用。
 
-See also [ClojureWerkz’s recommendations] for open source projects.
+另参考 [ClojureWerkz 的建议] 了解开源项目。
 
-[ClojureWerkz’s recommendations]:  http://blog.clojurewerkz.org/blog/2013/04/20/how-to-make-your-open-source-project-really-awesome/
+[ClojureWerkz 的建议]:  http://blog.clojurewerkz.org/blog/2013/04/20/how-to-make-your-open-source-project-really-awesome/
 [`gulp-autoprefixer`]: https://github.com/sindresorhus/gulp-autoprefixer
 [`gulp‑postcss`]:      https://github.com/w0rm/gulp-postcss
 [`postcss-cli`]:       https://github.com/postcss/postcss-cli
 
 ## 1. API
 
-### 1.1. Accept functions in plugin parameters
+### 1.1. 在插件参数中接受函数
 
-If your runner uses a config file, it must be written in JavaScript, so that
-it can support plugins which accept a function, such as [`postcss-assets`]:
+如果你的 runner 使用配置文件，它必须用 JavaScript 编写，这样它可以支持接受函数的插件，例如[`postcss-assets`]：
 
 ```js
 module.exports = [
@@ -33,46 +30,40 @@ module.exports = [
 
 [`postcss-assets`]: https://github.com/borodean/postcss-assets
 
-## 2. Processing
+## 2. 处理
 
-### 2.1. Set `from` and `to` processing options
+### 2.1. 设置 `from` 和 `to` 处理选项
 
-To ensure that PostCSS generates source maps and displays better syntax errors,
-runners must specify the `from` and `to` options. If your runner does not handle
-writing to disk (for example, a gulp transform), you should set both options
-to point to the same file:
+为了保证 PostCSS 生成源映射并更好地显示的语法错误，runner 必须指定 `from` 和 `to` 选项。如果你的 runner 不用处理写入磁盘（例如，gulp转换）任务，您将两个选项设置成指向同一个文件：
 
 ```js
 processor.process({ from: file.path, to: file.path });
 ```
 
-### 2.2. Use only the asynchronous API
+### 2.2. 请只使用异步 API
 
-PostCSS runners must use only the asynchronous API.
-The synchronous API is provided only for debugging, is slower,
-and can’t work with asynchronous plugins.
+PostCSS runner 必须只使用异步API。同步API仅用于调试，速度更慢，并且无法与异步插件一同工作。
 
 ```js
 processor.process(opts).then(function (result) {
-    // processing is finished
+    // 处理已被完成
 });
 ```
 
-### 2.3. Use only the public PostCSS API
+### 2.3. 请只使用公开的 PostCSS API
 
-PostCSS runners must not rely on undocumented properties or methods,
-which may be subject to change in any minor release. The public API
-is described in [API docs].
+PostCSS插件不能依赖于未记录的属性或方法，在任何次要版本中可能会有所变化。公共API
+在[API docs]中描述。
 
 [API docs]: http://api.postcss.org/
 
-## 3. Output
+## 3. 输出
 
-### 3.1. Don’t show JS stack for `CssSyntaxError`
+### 3.1. 不要为 `CssSyntaxError` 显示堆栈
 
-PostCSS runners must not show a stack trace for CSS syntax errors,
-as the runner can be used by developers who are not familiar with JavaScript.
-Instead, handle such errors gracefully:
+
+PostCSS runner 不应为 CSS 语法错误显示堆栈，因为 runner 会被不熟悉 JavaScript 的开发人员使用。
+相反，要优雅地处理这样的错误：
 
 ```js
 processor.process(opts).catch(function (error) {
@@ -84,9 +75,9 @@ processor.process(opts).catch(function (error) {
 });
 ```
 
-### 3.2. Display `result.warnings()`
+### 3.2. 显示 `result.warnings()`
 
-PostCSS runners must output warnings from `result.warnings()`:
+PostCSS runner 必须通过 `result.warnings()` 输出警告:
 
 ```js
 result.warnings().forEach(function (warn) {
@@ -94,16 +85,15 @@ result.warnings().forEach(function (warn) {
 });
 ```
 
-See also [postcss-log-warnings] and [postcss-messages] plugins.
+另参阅 [postcss-log-warnings] 和 [postcss-messages] 插件.
 
 [postcss-log-warnings]: https://github.com/davidtheclark/postcss-log-warnings
 [postcss-messages]:     https://github.com/postcss/postcss-messages
 
-### 3.3. Allow the user to write source maps to different files
+### 3.3. 允许用户将源码映射写入不同的文件
 
-PostCSS by default will inline source maps in the generated file; however,
-PostCSS runners must provide an option to save the source map in a different
-file:
+PostCSS 默认情况下会在生成的文件中内联源码映射;然而，PostCSS runner 必须提供将源码映射保存到其它文件的选项
+文件：
 
 ```js
 if ( result.map ) {
@@ -111,33 +101,26 @@ if ( result.map ) {
 }
 ```
 
-## 4. Documentation
+## 4. 文档
 
-### 4.1. Document your runner in English
+### 4.1. 用英文给你的 runner 写文档
 
-PostCSS runners must have their `README.md` written in English. Do not be afraid
-of your English skills, as the open source community will fix your errors.
+PostCSS runner 必须用英文写好 "README.md"。不要害怕你的英语技能，因为开源社区将会修复你的错误。
 
-Of course, you are welcome to write documentation in other languages;
-just name them appropriately (e.g. `README.ja.md`).
+当然，也欢迎你用其它语言写文档，但请恰当地对文件全名（比如：`README.ja.md`）
 
-### 4.2. Maintain a changelog
+### 4.2. 维护一个变更日志
 
-PostCSS runners must describe changes of all releases in a separate file,
-such as `ChangeLog.md`, `History.md`, or with [GitHub Releases].
-Visit [Keep A Changelog] for more information on how to write one of these.
+PPostCSS runner 必须在一个单独的文件里，例如`CHANGELOG.md`, `History.md`, 或 [GitHub Releases] 描述它们所有的变更。访问 [Keep A Changelog] 获取更多有关如何写变更日志的信息。
 
-Of course you should use [SemVer].
+当然，你应该使用 [SemVer] 描述版本号.
 
 [Keep A Changelog]: http://keepachangelog.com/
 [GitHub Releases]:  https://help.github.com/articles/creating-releases/
 [SemVer]:           http://semver.org/
 
-### 4.3. `postcss-runner` keyword in `package.json`
+### 4.3. 在 `package.json` 包含 `postcss-runner` 关键词
 
-PostCSS runners written for npm must have the `postcss-runner` keyword
-in their `package.json`. This special keyword will be useful for feedback about
-the PostCSS ecosystem.
+将 PostCSS runner 写成 npm 类库必须在 `package.json` 中包含 `postcss-runner` 关键词。这个特别的关键词将对 PostCSS 生态的反馈非常有用。
 
-For packages not published to npm, this is not mandatory, but recommended
-if the package format is allowed to contain keywords.
+那些没被发布到 npm 平台的 runner，这个不是强制的，但建议采纳如果 runner 格式能包括该关键词。
